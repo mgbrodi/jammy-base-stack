@@ -7,6 +7,9 @@ readonly PROG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly ROOT_DIR="$(cd "${PROG_DIR}/.." && pwd)"
 readonly BIN_DIR="${ROOT_DIR}/.bin"
 readonly IMAGES_JSON="${ROOT_DIR}/images.json"
+readonly BUILD_DIR="${ROOT_DIR}/build"
+REGISTRY=""
+TOML="stack.toml"
 
 # shellcheck source=SCRIPTDIR/.util/tools.sh
 source "${PROG_DIR}/.util/tools.sh"
@@ -52,6 +55,12 @@ function main() {
         shift 2
         ;;
 
+      --registry)
+        REGISTRY="${2}"
+        TOML="stack-arm-amd.toml"
+        shift 2
+        ;;
+
       "")
         # skip if the argument is empty
         shift 1
@@ -92,6 +101,7 @@ OPTIONS
   --secret          provide a secret in the form key=value. Use flag multiple times to provide multiple secrets
   --stack-dir       Provide the stack directory relative to the root directory. The default value is 'stack'.
   --build-dir       Provide the build directory relative to the root directory. The default value is 'build'.
+  --registry        registry (ex: harbor.h2o-4-11809.h2o.vmware.com/tanzubuild) use this to build multiplatform "linux/amd64" and "linux/arm64" 
 USAGE
 }
 
@@ -115,13 +125,21 @@ function stack::create() {
   flags=("${@}")
 
   args=(
-      --config "${stack_dirpath}/stack.toml"
+      --config "${stack_dirpath}/${TOML}"
       --build-output "${build_dirpath}/build.oci"
       --run-output "${build_dirpath}/run.oci"
+  )
+  if [[ -n "${REGISTRY}" ]]; then
+    args+=(
+      --publish
+      --build-ref "${REGISTRY}/paketo/build-jammy-base:jammy"
+      --run-ref "${REGISTRY}/paketo/run-jammy-base:jammy"
     )
+  fi
 
   args+=("${flags[@]}")
-
+  echo "Executing: jam create-stack ${args[@]}"
+  
   jam create-stack "${args[@]}"
 }
 

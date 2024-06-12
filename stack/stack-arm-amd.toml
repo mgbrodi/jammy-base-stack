@@ -1,0 +1,71 @@
+id = "io.buildpacks.stacks.jammy"
+homepage = "https://github.com/paketo-buildpacks/jammy-base-stack"
+maintainer = "Paketo Buildpacks"
+
+platforms = ["linux/arm64","linux/amd64"]
+
+[build]
+  description = "ubuntu:jammy with compilers and shell utilities"
+  dockerfile = "./build.Dockerfile"
+  gid = 1000
+  shell = "/bin/bash"
+  uid = 1001
+
+  [build.args]
+    sources = """
+    deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy main universe multiverse
+    deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-updates main universe multiverse
+    deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-security main universe multiverse
+    
+    deb [arch=arm64] http://mirrors.mit.edu/ubuntu-ports jammy main universe multiverse
+    deb [arch=arm64] http://mirrors.mit.edu/ubuntu-ports jammy-updates main universe multiverse
+    deb [arch=arm64] http://mirrors.mit.edu/ubuntu-ports jammy-security main universe multiverse
+    """
+
+    packages = """\
+    build-essential \
+    ca-certificates \
+    curl \
+    git \
+    jq \
+    libexpat1 \
+    libgmp-dev \
+    libssl3 \
+    libssl-dev \
+    libyaml-0-2 \
+    netbase \
+    openssl \
+    pkg-config \
+    tzdata \
+    xz-utils \
+    zlib1g-dev \
+    """
+
+[run]
+  description = "ubuntu:jammy with some common dependencies like tzdata and openssl"
+  dockerfile = "./run.Dockerfile"
+  gid = 1000
+  shell = "/bin/bash"
+  uid = 1002
+
+  [run.args]
+    sources = """
+    deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy main universe multiverse
+    deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-updates main universe multiverse
+    deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-security main universe multiverse
+    
+    deb [arch=arm64] http://mirrors.mit.edu/ubuntu-ports jammy main universe multiverse
+    deb [arch=arm64] http://mirrors.mit.edu/ubuntu-ports jammy-updates main universe multiverse
+    deb [arch=arm64] http://mirrors.mit.edu/ubuntu-ports jammy-security main universe multiverse
+    """
+
+    packages = """\
+    ca-certificates \
+    libexpat1 \
+    libssl3 \
+    libyaml-0-2 \
+    netbase \
+    openssl \
+    tzdata \
+    zlib1g \
+    """

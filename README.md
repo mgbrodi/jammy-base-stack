@@ -9,7 +9,7 @@ Ideal for:
 - Go apps that require some C libraries
 - Node.js/Python/Ruby/etc. apps **without** many native extensions
 
-## How do I uild multi-platform stack?
+## How do I uild multi-platform for "linux/amd64" and "linux/arm64" stack?
 
 Chech the help:
 ```
@@ -24,6 +24,9 @@ OPTIONS
   --secret          provide a secret in the form key=value. Use flag multiple times to provide multiple secrets
   --registry        registry (ex: harbor.h2o-4-11809.h2o.vmware.com/tanzubuild) use this to build multiplatform "linux/amd64" and "linux/arm64" to be published as ${REGISTRY}/paketo/run-jammy-base:jammy" and ${REGISTRY}/paketo/build-jammy-base:jammy"
 ```
+
+To add support for more platforms modify `[build.args]` and `[run.args]` sections in `stack-multi-platform.toml` with the appropriate repository information.
+
 ## What's in the build and run images of this stack?
 This stack's build and run images are based on Ubuntu Jammy Jellyfish.
 

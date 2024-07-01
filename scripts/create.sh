@@ -57,7 +57,7 @@ function main() {
 
       --registry)
         REGISTRY="${2}"
-        TOML="stack-arm-amd.toml"
+        TOML="stack-multi-platform.toml"
         shift 2
         ;;
 

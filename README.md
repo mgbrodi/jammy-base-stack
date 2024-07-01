@@ -9,7 +9,7 @@ Ideal for:
 - Go apps that require some C libraries
 - Node.js/Python/Ruby/etc. apps **without** many native extensions
 
-## How do I uild multi-platform for "linux/amd64" and "linux/arm64" stack?
+## How do I build multi-platform for "linux/amd64" and "linux/arm64" stack?
 
 Chech the help:
 ```

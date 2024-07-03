@@ -11,7 +11,7 @@ Ideal for:
 
 ## How do I build multi-platform for "linux/amd64" and "linux/arm64" stack?
 
-Chech the help:
+Check the help:
 ```
 ./create.sh -h
 create.sh [OPTIONS]
@@ -22,10 +22,36 @@ the repository.
 OPTIONS
   --help       -h   prints the command usage
   --secret          provide a secret in the form key=value. Use flag multiple times to provide multiple secrets
-  --registry        registry (ex: harbor.h2o-4-11809.h2o.vmware.com/tanzubuild) use this to build multiplatform "linux/amd64" and "linux/arm64" to be published as ${REGISTRY}/paketo/run-jammy-base:jammy" and ${REGISTRY}/paketo/build-jammy-base:jammy"
+  --registry        registry (ex: harbor.h2o-4-11809.h2o.vmware.com/paketo) use this to build multiplatform "linux/amd64" and "linux/arm64" to be published as harbor.h2o-4-11809.h2o.vmware.com/paketo/run-jammy-base:jammy" and harbor.h2o-4-11809.h2o.vmware.com/paketo/build-jammy-base:jammy"
+```
+
+Run:
+`./create.sh --registry <YOUR REGISTRY>`
+to create and push the multi-platform image to <YOUR REGISTRY>.
+
+Verify the dual manifest:
+```
+skopeo inspect docker://<YOUR REGISTRY>build-jammy-base:jammy --raw | jq
+skopeo inspect docker://<YOUR REGISTRY>run-jammy-base:jammy --raw | jq
 ```
 
 To add support for more platforms modify `[build.args]` and `[run.args]` sections in `stack-multi-platform.toml` with the appropriate repository information.
+
+
+To execute the provided tests for multi-platform images you need to test separately _for each archietcture_:
+In the machine you currently built the image go ahead and run the test script.
+
+Connect to a machine with the chipset you need to test. 
+For the sake of the example let's assume you already tested on an _amd_ and now need to text on and _arm_.
+
+```
+git clone this repository (https://github.com/tanzu-build/jammy-base-stack.git)
+cd jammy-base-stack
+checkout multiplatform-amdarm
+mkdir build
+skopeo copy docker://<YOUR REGISTRY>/build-jammy-base:jammy oci-archive://<ABSOLUTE PATH TO YOUR build directory just created>/jammy-base-stack/skopeo/build.oci --override-arch arm64 --override-os linux
+skopeo copy docker://<YOUR REGISTRY>/run-jammy-base:jammy oci-archive://<ABSOLUTE PATH TO YOUR build directory just created>/jammy-base-stack/skopeo/build.oci --override-arch arm64 --override-os linux
+```
 
 ## What's in the build and run images of this stack?
 This stack's build and run images are based on Ubuntu Jammy Jellyfish.

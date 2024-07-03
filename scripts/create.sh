@@ -132,8 +132,8 @@ function stack::create() {
   if [[ -n "${REGISTRY}" ]]; then
     args+=(
       --publish
-      --build-ref "${REGISTRY}/paketo/build-jammy-base:jammy"
-      --run-ref "${REGISTRY}/paketo/run-jammy-base:jammy"
+      --build-ref "${REGISTRY}/build-jammy-base:jammy"
+      --run-ref "${REGISTRY}/run-jammy-base:jammy"
     )
   fi
 

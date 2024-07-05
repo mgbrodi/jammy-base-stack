@@ -49,8 +49,9 @@ git clone this repository (https://github.com/tanzu-build/jammy-base-stack.git)
 cd jammy-base-stack
 checkout multiplatform-amdarm
 mkdir build
-skopeo copy docker://<YOUR REGISTRY>/build-jammy-base:jammy oci-archive://<ABSOLUTE PATH TO YOUR build directory just created>/jammy-base-stack/skopeo/build.oci --override-arch arm64 --override-os linux
-skopeo copy docker://<YOUR REGISTRY>/run-jammy-base:jammy oci-archive://<ABSOLUTE PATH TO YOUR build directory just created>/jammy-base-stack/skopeo/build.oci --override-arch arm64 --override-os linux
+skopeo copy docker://<YOUR REGISTRY>/build-jammy-base:jammy oci-archive://<ABSOLUTE PATH TO YOUR build directory just created>/build.oci --override-arch arm64 --override-os linux
+skopeo copy docker://<YOUR REGISTRY>/run-jammy-base:jammy oci-archive://<ABSOLUTE PATH TO YOUR build directory just created>/build.oci --override-arch arm64 --override-os linux
+./scripts/test.sh
 ```
 
 ## What's in the build and run images of this stack?
